@@ -1,0 +1,30 @@
+version: "3"
+services:
+  node_backend:
+    depends_on:
+        - pg
+    container_name: "node_backend"
+    build: ./node_backend/
+    ports:
+      - "3001:3001"
+  pg:
+    image: "postgres:12"
+    container_name: "postgres"
+    environment:
+      - POSTGRES_USER=owo
+      - POSTGRES_PASSWORD=password
+      - APP_DB_USER=uwu
+      - APP_DB_PASS=password
+      - APP_DB_NAME=datalol
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pg:/docker-entrypoint-initdb.d/
+  react_frontend:
+    depends_on:
+        - pg
+        - node_backend
+    container_name: "react_frontend"
+    build: ./react_frontend/
+    ports:
+      - "8080:8080"
